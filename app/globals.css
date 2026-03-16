@@ -1,0 +1,374 @@
+:root {
+  --background: #f6efe4;
+  --background-strong: #f0e3d3;
+  --surface: rgba(255, 251, 245, 0.8);
+  --surface-strong: rgba(41, 32, 23, 0.92);
+  --text: #2a2117;
+  --text-inverse: #f7f0e6;
+  --muted: #6e604f;
+  --line: rgba(42, 33, 23, 0.12);
+  --accent: #c15b32;
+  --accent-soft: #efb07b;
+  --success: #28533f;
+  --error: #9d2d26;
+  --shadow: 0 30px 70px rgba(68, 43, 19, 0.12);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at top left, rgba(193, 91, 50, 0.18), transparent 28%),
+    radial-gradient(circle at bottom right, rgba(239, 176, 123, 0.2), transparent 32%),
+    linear-gradient(180deg, #f8f2e9 0%, #f0e4d5 100%);
+  color: var(--text);
+  font-family: var(--font-sans), sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select {
+  font: inherit;
+}
+
+code {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+}
+
+.page-shell {
+  width: min(1180px, calc(100% - 32px));
+  margin: 0 auto;
+  padding: 32px 0 72px;
+}
+
+.hero {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 24px;
+  align-items: stretch;
+  padding: 32px 0 18px;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 14px 16px auto auto;
+  width: 160px;
+  height: 160px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.42);
+  filter: blur(18px);
+  pointer-events: none;
+}
+
+.hero-copy,
+.hero-panel,
+.highlight-card,
+.checklist-card,
+.form-card {
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow);
+  backdrop-filter: blur(14px);
+}
+
+.hero-copy {
+  padding: 48px;
+  border-radius: 36px;
+  background: linear-gradient(135deg, rgba(255, 250, 243, 0.95), rgba(243, 229, 211, 0.8));
+}
+
+.eyebrow,
+.section-label,
+.panel-topline span {
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  font-size: 0.76rem;
+}
+
+.eyebrow,
+.section-label {
+  color: var(--muted);
+}
+
+.hero-copy h1,
+.checklist-card h2,
+.form-card h2,
+.highlight-card h2 {
+  font-family: var(--font-display), serif;
+  line-height: 0.95;
+  margin: 0;
+}
+
+.hero-copy h1 {
+  max-width: 12ch;
+  font-size: clamp(3.2rem, 7vw, 6.3rem);
+  margin-top: 18px;
+}
+
+.lede {
+  max-width: 58ch;
+  margin: 22px 0 0;
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: var(--muted);
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 34px;
+}
+
+.primary-link,
+.secondary-link,
+.demo-form button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 52px;
+  border-radius: 999px;
+  padding: 0 22px;
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease,
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+.primary-link,
+.demo-form button {
+  background: var(--accent);
+  color: var(--text-inverse);
+  box-shadow: 0 14px 30px rgba(193, 91, 50, 0.25);
+}
+
+.secondary-link {
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.52);
+}
+
+.primary-link:hover,
+.secondary-link:hover,
+.demo-form button:hover:not(:disabled) {
+  transform: translateY(-1px);
+}
+
+.hero-panel {
+  padding: 26px;
+  border-radius: 32px;
+  background: var(--surface-strong);
+  color: var(--text-inverse);
+}
+
+.panel-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  color: rgba(247, 240, 230, 0.68);
+}
+
+.stat-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+
+.stat-grid article {
+  min-height: 164px;
+  padding: 18px;
+  border-radius: 24px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.stat-grid strong {
+  display: block;
+  font-family: var(--font-display), serif;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.stat-grid p {
+  margin: 14px 0 0;
+  color: rgba(247, 240, 230, 0.74);
+  line-height: 1.7;
+}
+
+.highlight-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+  margin-top: 14px;
+}
+
+.highlight-card,
+.checklist-card,
+.form-card {
+  border-radius: 28px;
+  background: var(--surface);
+}
+
+.highlight-card {
+  padding: 28px;
+}
+
+.highlight-card h2,
+.checklist-card h2,
+.form-card h2 {
+  font-size: clamp(2rem, 3vw, 2.8rem);
+}
+
+.highlight-card p,
+.checklist-card li,
+.form-intro,
+.demo-form label span,
+.status-box {
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.content-grid {
+  display: grid;
+  grid-template-columns: 0.95fr 1.05fr;
+  gap: 20px;
+  margin-top: 20px;
+}
+
+.checklist-card,
+.form-card {
+  padding: 32px;
+}
+
+.checklist-card ol {
+  margin: 24px 0 0;
+  padding-left: 18px;
+}
+
+.checklist-card li + li {
+  margin-top: 12px;
+}
+
+.form-intro {
+  margin: 16px 0 0;
+}
+
+.demo-form {
+  display: grid;
+  gap: 16px;
+  margin-top: 22px;
+}
+
+.demo-form label {
+  display: grid;
+  gap: 8px;
+}
+
+.demo-form input,
+.demo-form select {
+  width: 100%;
+  min-height: 52px;
+  padding: 0 16px;
+  border: 1px solid rgba(42, 33, 23, 0.14);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.78);
+  color: var(--text);
+}
+
+.demo-form input:focus,
+.demo-form select:focus {
+  outline: 2px solid rgba(193, 91, 50, 0.28);
+  outline-offset: 2px;
+}
+
+.demo-form button {
+  width: 100%;
+  border: 0;
+  cursor: pointer;
+}
+
+.demo-form button:disabled {
+  cursor: wait;
+  opacity: 0.72;
+}
+
+.status-box {
+  margin-top: 18px;
+  border-radius: 18px;
+  padding: 16px 18px;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(42, 33, 23, 0.08);
+}
+
+.status-success {
+  color: var(--success);
+}
+
+.status-error {
+  color: var(--error);
+}
+
+@media (max-width: 980px) {
+  .hero,
+  .highlight-grid,
+  .content-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-copy {
+    padding: 36px 28px;
+  }
+}
+
+@media (max-width: 640px) {
+  .page-shell {
+    width: min(100% - 20px, 1180px);
+    padding-top: 18px;
+    padding-bottom: 40px;
+  }
+
+  .hero {
+    gap: 16px;
+  }
+
+  .hero-copy,
+  .hero-panel,
+  .highlight-card,
+  .checklist-card,
+  .form-card {
+    border-radius: 24px;
+  }
+
+  .hero-copy {
+    padding: 26px 20px;
+  }
+
+  .hero-copy h1 {
+    max-width: none;
+    font-size: clamp(2.6rem, 14vw, 4.2rem);
+  }
+
+  .stat-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .checklist-card,
+  .form-card {
+    padding: 24px 20px;
+  }
+}
