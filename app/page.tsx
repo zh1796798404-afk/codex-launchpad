@@ -1,100 +1,140 @@
-import { DemoForm } from "@/components/demo-form";
+import Link from "next/link";
+import { SetupGuide } from "@/components/setup-guide";
+import { SetupBanner } from "@/components/setup-banner";
+import { MenuSection } from "@/components/menu/menu-section";
+import { env, hasSupabaseEnv } from "@/lib/env";
+import { formatCurrency } from "@/lib/format";
+import { sampleStoryStats } from "@/lib/mock-data";
+import { getFeaturedItems, getMenuData } from "@/lib/data";
 
-const deploymentSteps = [
-  "Push the code to GitHub from the current branch.",
-  "Import the repository into Vercel and confirm the detected Next.js settings.",
-  "Copy the values from .env.example into Vercel project environment variables.",
-  "Deploy once, then share the generated vercel.app URL with test users.",
-  "Bind your own domain when you are ready for public release."
-];
-
-const highlights = [
+const serviceMoments = [
   {
-    title: "Full-stack by default",
-    description:
-      "The landing page and API route live in one project, so Vercel can build and deploy everything together."
+    title: "前台点单体验",
+    description: "用户登录后即可浏览菜单、加入购物车并提交自取或堂食订单。"
   },
   {
-    title: "Friendly deployment path",
-    description:
-      "GitHub remains the source of truth. Every push can create a fresh preview or update production without server maintenance."
+    title: "后台订单处理",
+    description: "管理员在后台查看最新订单，一键切换待处理、制作中和可取餐状态。"
   },
   {
-    title: "Environment-ready",
-    description:
-      "Secret values stay in local or Vercel environment variables instead of being hard-coded into the repo."
+    title: "菜单持久化管理",
+    description: "使用 Supabase 持久化分类与菜品，刷新页面和重新部署都不会丢数据。"
   }
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const [featuredItems, menuSections] = await Promise.all([getFeaturedItems(), getMenuData(false)]);
+
   return (
-    <main className="page-shell">
-      <section className="hero">
-        <div className="hero-copy">
-          <p className="eyebrow">Deployable from day one</p>
-          <h1>Ship a polished web app with Codex, GitHub, and Vercel.</h1>
-          <p className="lede">
-            This starter gives you a real homepage, a working API route, and a clean deployment
-            checklist so non-technical users can open a live link instead of asking for local setup.
-          </p>
-
-          <div className="hero-actions">
-            <a className="primary-link" href="#launch-form">
-              Try the live API
-            </a>
-            <a className="secondary-link" href="#deploy-checklist">
-              Review the launch steps
-            </a>
+    <main>
+      <section className="hero-section">
+        <div className="shell hero-grid">
+          <div className="hero-copy-card">
+            <p className="hero-kicker">Modern Dining Commerce</p>
+            <h1>{env.siteName}</h1>
+            <p className="hero-copy">
+              一个面向真实门店的中文点单餐饮网站模板。支持用户登录、购物车、订单列表与
+              管理员后台菜单管理，既有品牌感，也能直接向实际业务靠拢。
+            </p>
+            <div className="inline-actions">
+              <Link className="button button-primary" href="/menu">
+                立即点单
+              </Link>
+              <Link className="button button-secondary" href="/admin">
+                打开管理后台
+              </Link>
+            </div>
           </div>
-        </div>
 
-        <div className="hero-panel">
-          <div className="panel-topline">
-            <span>Launch sequence</span>
-            <span>GitHub - Vercel</span>
-          </div>
-          <div className="stat-grid">
-            <article>
-              <strong>1 repo</strong>
-              <p>Front end and API routes deploy together.</p>
-            </article>
-            <article>
-              <strong>0 servers</strong>
-              <p>No manual VM setup, patching, or process manager required.</p>
-            </article>
-            <article>
-              <strong>Fast previews</strong>
-              <p>Each push can become a shareable preview build for review.</p>
-            </article>
-            <article>
-              <strong>Safe secrets</strong>
-              <p>Production keys live in Vercel environment settings, not git history.</p>
-            </article>
+          <div className="hero-preview-card">
+            <div className="preview-topline">
+              <span>Brand kitchen system</span>
+              <span>V1</span>
+            </div>
+            <div className="hero-preview-grid">
+              {featuredItems.map((item, index) => (
+                <article className={`preview-dish preview-dish-${(index % 4) + 1}`} key={item.id}>
+                  <span>{formatCurrency(item.price)}</span>
+                  <strong>{item.name}</strong>
+                  <p>{item.description}</p>
+                </article>
+              ))}
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="highlight-grid">
-        {highlights.map((item) => (
-          <article className="highlight-card" key={item.title}>
-            <h2>{item.title}</h2>
-            <p>{item.description}</p>
+      <section className="shell story-strip">
+        {sampleStoryStats.map((stat) => (
+          <article className="story-stat" key={stat.label}>
+            <span>{stat.label}</span>
+            <strong>{stat.value}</strong>
           </article>
         ))}
       </section>
 
-      <section className="content-grid">
-        <div className="checklist-card" id="deploy-checklist">
-          <p className="section-label">Deployment checklist</p>
-          <h2>Everything you need before sharing the link</h2>
-          <ol>
-            {deploymentSteps.map((step) => (
-              <li key={step}>{step}</li>
-            ))}
-          </ol>
-        </div>
+      {!hasSupabaseEnv ? (
+        <section className="shell section-gap">
+          <SetupBanner />
+        </section>
+      ) : null}
 
-        <DemoForm />
+      <section className="shell section-gap">
+        <div className="section-heading">
+          <p className="section-kicker">业务能力</p>
+          <h2>把餐饮品牌官网与点单系统合在一起</h2>
+        </div>
+        <div className="feature-grid">
+          {serviceMoments.map((item) => (
+            <article className="feature-card" key={item.title}>
+              <h3>{item.title}</h3>
+              <p>{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shell section-gap">
+        <div className="section-heading">
+          <p className="section-kicker">本周招牌</p>
+          <h2>从首页就能看到代表门店调性的菜品</h2>
+        </div>
+        <div className="menu-card-grid">
+          {featuredItems.map((item, index) => (
+            <article className="dish-card" key={item.id}>
+              <div className={`dish-visual dish-visual-${(index % 4) + 1}`}>
+                <span>Signature</span>
+                <strong>{item.name}</strong>
+              </div>
+              <div className="dish-content">
+                <div className="dish-header">
+                  <div>
+                    <h3>{item.name}</h3>
+                    <p>{item.description}</p>
+                  </div>
+                  <strong>{formatCurrency(item.price)}</strong>
+                </div>
+                <Link className="button button-primary" href="/menu">
+                  去菜单页点这道菜
+                </Link>
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="shell section-gap">
+        <div className="section-heading">
+          <p className="section-kicker">菜单预览</p>
+          <h2>先给用户看品牌，再让他们顺滑进入下单</h2>
+        </div>
+        {menuSections.slice(0, 2).map((section) => (
+          <MenuSection key={section.id} section={section} />
+        ))}
+      </section>
+
+      <section className="shell section-gap">
+        <SetupGuide />
       </section>
     </main>
   );

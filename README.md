@@ -1,20 +1,18 @@
-# Codex Launchpad
+# 火候厨房
 
-A deploy-ready full-stack Next.js starter built for the workflow:
+一个基于 `Next.js App Router + Supabase + Vercel` 的中文单店餐饮点单网站模板。
 
-1. Build or edit locally with Codex
-2. Push to GitHub
-3. Let Vercel deploy automatically
-4. Share the public URL with end users
+当前版本已经包含：
 
-## What is included
+- 品牌首页与菜单页
+- 邮箱密码注册 / 登录
+- 本地购物车
+- 用户下单与订单历史
+- 管理员后台菜单管理
+- 管理员后台订单处理
+- Supabase 数据库表结构与种子数据
 
-- A polished landing page in the Next.js App Router
-- A working API endpoint at `POST /api/interest`
-- Environment variable examples for local development and Vercel
-- A beginner-friendly deployment checklist for GitHub and Vercel
-
-## Quick start
+## 本地启动
 
 ```bash
 npm install
@@ -22,91 +20,94 @@ cp .env.example .env.local
 npm run dev
 ```
 
-Then open [http://localhost:3000](http://localhost:3000).
+默认情况下，如果你还没配置 Supabase，前台会显示演示菜单和配置提示，但登录、下单和后台写入不会真正生效。
 
-## Environment variables
+## 环境变量
 
-Create `.env.local` from `.env.example`.
+在 `.env.local` 和 Vercel 中至少配置这些变量：
 
 ```bash
 NEXT_PUBLIC_SITE_URL=http://localhost:3000
-NEXT_PUBLIC_SITE_NAME=Codex Launchpad
+NEXT_PUBLIC_SITE_NAME=火候厨房
 CONTACT_EMAIL=hello@example.com
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
 ```
 
-Notes:
+说明：
 
-- `NEXT_PUBLIC_SITE_URL` is used as the public base URL.
-- `NEXT_PUBLIC_SITE_NAME` is available for future client-side branding.
-- `CONTACT_EMAIL` is read on the server side by the API route.
+- `NEXT_PUBLIC_SITE_URL`：站点公开地址
+- `NEXT_PUBLIC_SITE_NAME`：品牌名称
+- `CONTACT_EMAIL`：页脚联系邮箱
+- `NEXT_PUBLIC_SUPABASE_URL`：Supabase 项目 URL
+- `NEXT_PUBLIC_SUPABASE_ANON_KEY`：Supabase 公钥
+- `SUPABASE_SERVICE_ROLE_KEY`：服务端高权限密钥，当前版本预留给后台管理场景
 
-## Run checks before deployment
+## Supabase 初始化
+
+### 1. 创建项目
+
+在 [Supabase Dashboard](https://supabase.com/dashboard) 创建一个新项目。
+
+### 2. 打开邮箱密码登录
+
+进入 `Authentication -> Providers -> Email`，确保 Email/Password 登录开启。
+
+### 3. 创建数据库结构
+
+打开 `SQL Editor`，先运行：
+
+[`supabase/schema.sql`](/Users/sedia/Documents/codex%20workplace/supabase/schema.sql)
+
+再运行：
+
+[`supabase/seed.sql`](/Users/sedia/Documents/codex%20workplace/supabase/seed.sql)
+
+### 4. 创建管理员账号
+
+先在前台注册一个普通账号，然后到 `Table Editor -> profiles` 把这个账号的 `role` 改成 `admin`。
+
+这样它就能访问 `/admin`。
+
+## 页面结构
+
+- `/` 品牌首页
+- `/menu` 菜单页
+- `/cart` 购物车
+- `/checkout` 结算页
+- `/orders` 用户订单页
+- `/login` 登录
+- `/register` 注册
+- `/admin` 管理后台首页
+- `/admin/menu` 菜单管理
+- `/admin/orders` 订单管理
+
+## 关键数据表
+
+- `profiles`
+- `menu_categories`
+- `menu_items`
+- `orders`
+- `order_items`
+
+订单会保存菜品名称与价格快照，所以后续改价不会影响历史订单。
+
+## Vercel 部署
+
+1. 把代码推到 GitHub
+2. 在 Vercel 导入该仓库
+3. 在 Vercel 环境变量中填入 `.env.example` 里的 Supabase 配置
+4. 重新部署
+
+部署完成后，你就可以：
+
+- 普通用户访问站点、注册登录、下单
+- 管理员登录后台上架菜品、查看和处理订单
+
+## 本地检查
 
 ```bash
 npm run lint
 npm run build
 ```
-
-## GitHub and Vercel deployment
-
-### 1. Create a GitHub repository
-
-If the repo does not already have a remote:
-
-```bash
-git remote add origin <your-github-repo-url>
-git push -u origin codex/my-change
-```
-
-If you want production deployments from `main`, merge your working branch into `main` after review.
-
-### 2. Import the repository into Vercel
-
-In Vercel:
-
-1. Click `Add New...`
-2. Choose `Project`
-3. Import the GitHub repository
-4. Keep the detected Next.js framework preset
-
-### 3. Add environment variables in Vercel
-
-In the Vercel project settings, add:
-
-- `NEXT_PUBLIC_SITE_URL`
-- `NEXT_PUBLIC_SITE_NAME`
-- `CONTACT_EMAIL`
-
-For production, set `NEXT_PUBLIC_SITE_URL` to your deployed domain, for example:
-
-```bash
-https://your-project.vercel.app
-```
-
-### 4. Deploy and share
-
-After the first successful deployment:
-
-- test the homepage
-- submit the built-in form
-- confirm the API route responds
-- share the generated `vercel.app` URL with users
-
-### 5. Optional custom domain
-
-When you are ready for a branded URL:
-
-1. Open the Vercel project
-2. Go to `Settings -> Domains`
-3. Add your domain
-4. Update third-party callback URLs if you use login, payments, or email providers
-
-## Codex commit flow
-
-Inside Codex's `Submit changes` dialog:
-
-- `Commit` creates a local git commit only
-- `Commit and push` pushes your branch to GitHub
-- `Commit and create PR` requires GitHub CLI (`gh`) and is optional
-
-For a beginner-friendly workflow, `Commit and push` is enough.
